@@ -275,75 +275,90 @@ function onCalculate() {
 
 <!--Exercise 8-->
 <html>
-<head></head>
-<body>
-    <h2>Objects and Classes</h2>
-    <h1>Shopping Basket</h1>
-    <p>Click the button below to add items to your basket and calculate the total cost.</p>
-    
-    <button onclick="addItemToBasket('apple', 2)">Add 2 Apples</button>
-    <button onclick="addItemToBasket('banana', 3)">Add 3 Bananas</button>
-    <button onclick="showTotalCost()">Show Total Cost</button>
+  <head>
+    <title>Exercise 8: Basket Class</title>
+  </head>
+  <body>
+    <h2>Exercise 8: Objects and Classes</h2>
 
-    <div class="output">
-        <h3>Basket Contents:</h3>
-        <p id="basketContents"></p>
-        <h3>Total Cost:</h3>
-        <p id="totalCost"></p>
-    </div>
+    <p>Shopping Basket:</p>
+    
+    <!-- Inputs to add items -->
+    <label>Avocado ($1.5 each):</label>
+    <input type="number" id="avocadoQty" value="0" min="0"><br>
+    
+    <label>Apple ($0.8 each):</label>
+    <input type="number" id="appleQty" value="0" min="0"><br>
+    
+    <label>Orange ($1.2 each):</label>
+    <input type="number" id="orangeQty" value="0" min="0"><br>
+
+    <!-- Buttons to add items and calculate total -->
+    <button onclick="addItemToBasket()">Add Items to Basket</button>
+    <button onclick="calculateTotal()">Calculate Total</button>
+    
+    <p id="totalCost">Total: $0.00</p>
 
     <script>
-        // Basket class definition
-        class Basket {
-            constructor() {
-                this.items = [];
+      // Basket class definition
+      class Basket {
+        constructor() {
+          this.items = {};
+        }
+
+        // Method to add items to the basket
+        addItem(product, qty) {
+          if (this.items[product]) {
+            this.items[product] += qty; // If the item exists, increase the quantity
+          } else {
+            this.items[product] = qty; // If the item doesn't exist, add it to the basket
+          }
+        }
+
+        // Method to calculate total cost
+        getCost(prices) {
+          let totalCost = 0;
+          for (let product in this.items) {
+            if (prices[product]) {
+              totalCost += this.items[product] * prices[product]; // Calculate the total based on prices
             }
-
-            addItem(product, qty) {
-                this.items.push({ product, qty });
-            }
-
-            getCost(prices) {
-                let totalCost = 0;
-                this.items.forEach(item => {
-                    if (prices[item.product]) {
-                        totalCost += prices[item.product] * item.qty;
-                    }
-                });
-                return totalCost;
-            }
+          }
+          return totalCost.toFixed(2); // Return total cost as a fixed 2 decimal number
         }
+      }
 
-        // Sample product prices
-        const prices = {
-            apple: 1.5,
-            banana: 0.75 
-        };
+      // Create a new instance of the Basket class
+      let basket = new Basket();
 
-        // Initialize basket object
-        const basket = new Basket();
+      // Prices for the items
+      const prices = {
+        avocado: 1.5,
+        apple: 0.8,
+        orange: 1.2
+      };
 
-        // Function to add an item to the basket
-        function addItemToBasket(product, qty) {
-            basket.addItem(product, qty);
-            updateBasketContents();
-        }
+      // Function to add items to the basket
+      function addItemToBasket() {
+        const avocadoQty = parseInt(document.getElementById("avocadoQty").value) || 0;
+        const appleQty = parseInt(document.getElementById("appleQty").value) || 0;
+        const orangeQty = parseInt(document.getElementById("orangeQty").value) || 0;
 
-        // Function to show total cost
-        function showTotalCost() {
-            const total = basket.getCost(prices);
-            document.getElementById("totalCost").innerText = "$" + total.toFixed(2);
-        }
+        // Add items to basket using the addItem method
+        basket.addItem("avocado", avocadoQty);
+        basket.addItem("apple", appleQty);
+        basket.addItem("orange", orangeQty);
 
-        // Update the displayed basket contents
-        function updateBasketContents() {
-            const contents = basket.items.map(item => ${item.qty} x ${item.product}).join(", ");
-            document.getElementById("basketContents").innerText = contents || "Basket is empty.";
-        }
+        alert("Items added to the basket!");
+      }
+
+      // Function to calculate the total cost and display it
+      function calculateTotal() {
+        const total = basket.getCost(prices);
+        document.getElementById("totalCost").innerText = Total: $${total};
+      }
     </script>
-</body>
+  </body>
 </html>
-   
    
 
 
