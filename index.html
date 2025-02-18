@@ -359,6 +359,124 @@ function onCalculate() {
     </script>
   </body>
 </html>
+<!--Exercise 9-->
+<html>
+<head>
+  <title>Exercise 9: Basket Class Testing</title>
+</head>
+<body>
+
+<h2>Exercise 9: Testing the Basket Class</h2>
+
+<p>Shopping Basket:</p>
+
+<label>Avocado ($1.5 each):</label>
+<input type="number" id="avocadoQty" value="0" min="0"><br>
+
+<label>Apple ($0.8 each):</label>
+<input type="number" id="appleQty" value="0" min="0"><br>
+
+<label>Orange ($1.2 each):</label>
+<input type="number" id="orangeQty" value="0" min="0"><br>
+
+<button onclick="addItemToBasket()">Add Items to Basket</button>
+<button onclick="calculateTotal()">Calculate Total</button>
+<button onclick="resetBasket()">Reset Basket</button>
+
+<p id="totalCost">Total: $0.00</p>
+
+<p id="basketItems">Basket Items: </p>
+
+<script>
+// Basket class definition
+class Basket {
+  constructor() {
+    this.items = {};
+  }
+
+  // Method to add items to the basket
+  addItem(product, qty) {
+    if (this.items[product]) {
+      this.items[product] += qty; // If the item exists, increase the quantity
+    } else {
+      this.items[product] = qty; // If the item doesn't exist, add it to the basket
+    }
+  }
+
+  // Method to calculate total cost
+  getCost(prices) {
+    let totalCost = 0;
+    for (let product in this.items) {
+      if (prices[product]) {
+        totalCost += this.items[product] * prices[product]; // Calculate the total based on prices
+      }
+    }
+    return totalCost.toFixed(2); // Return total cost as a fixed 2 decimal number
+  }
+
+  // Method to get all items in the basket
+  getItems() {
+    return this.items;
+  }
+
+  // Method to reset the basket (clear all items)
+  reset() {
+    this.items = {};
+  }
+}
+
+// Create a new instance of the Basket class
+let basket = new Basket();
+
+// Prices for the items
+const prices = {
+  avocado: 1.5,
+  apple: 0.8,
+  orange: 1.2
+};
+
+// Function to add items to the basket
+function addItemToBasket() {
+  const avocadoQty = parseInt(document.getElementById("avocadoQty").value) || 0;
+  const appleQty = parseInt(document.getElementById("appleQty").value) || 0;
+  const orangeQty = parseInt(document.getElementById("orangeQty").value) || 0;
+
+  // Add items to basket using the addItem method
+  basket.addItem("avocado", avocadoQty);
+  basket.addItem("apple", appleQty);
+  basket.addItem("orange", orangeQty);
+
+  alert("Items added to the basket!");
+  displayBasketItems(); // Display updated basket items
+}
+
+// Function to calculate the total cost and display it
+function calculateTotal() {
+  const total = basket.getCost(prices);
+  document.getElementById("totalCost").innerText = Total: $${total};
+}
+
+// Function to reset the basket (clear all items)
+function resetBasket() {
+  basket.reset();
+  document.getElementById("totalCost").innerText = "Total: $0.00";
+  document.getElementById("basketItems").innerText = "Basket Items: ";
+}
+
+// Function to display all items in the basket
+function displayBasketItems() {
+  const items = basket.getItems();
+  let itemString = "Basket Items: ";
+  for (let item in items) {
+    itemString += `${item}: ${items[item]} | `;
+  }
+  document.getElementById("basketItems").innerText = itemString;
+}
+
+</script>
+
+</body>
+</html>
 
    
 
