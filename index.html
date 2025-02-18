@@ -273,89 +273,78 @@ function onCalculate() {
   </body> 
 </html>
 
-<h2>Exercise 8: Objects and classes </h2>
-        <p>Create a class, basket, that has a method addltem(product,qty)</p>
-        <p>it should have a method getCost(prices) that returns the cost of the items which have been added. </p>
-      
-        <h2>Exercise 9</h2>
-        <p>Create a testing page for class basket</p>
-
-        
-        <h2>Exercise 10</h2>
-        <p>Demonstrate the use of a component to display the basket</p> 
-
-        <h1>Shopping Basket</h1>
-        <div id="basketDisplay">
-          <p><strong>Items in Basket:</strong></p>
-          <ul id="basketItems"></ul>
-          <p><strong>Total Cost: $<span id="totalCost">0</span></strong></p>
-        </div>
-        
-        <button id="addItemButton">Add Item to Basket</button>
-      
-        <script>
-
-class Basket {
-  constructor() {
-    this.items = [];
-  }
-
-  addItem(product, qty) {
-    const existingItem = this.items.find(item => item.product === product);
-    if (existingItem) {
-      existingItem.qty += qty;
-    } else {
-      this.items.push({ product, qty });
-    }
-  }
-
-  getCost(prices) {
-    return this.items.reduce((total, item) => total + item.qty * prices[item.product], 0);
-  }
-}
-
-
-const basket = new Basket();
-        
-      
-       
-          const prices = {
-            apple: 2.00,
-            banana: 1.50,
-            orange: 3.00
-          };
-      
+<!--Exercise 8-->
+<html>
+<head></head>
+<body>
+    <h2>Objects and Classes</h2>
+    <h1>Shopping Basket</h1>
+    <p>Click the button below to add items to your basket and calculate the total cost.</p>
     
-          function updateDisplay() {
-            const basketItems = document.getElementById('basketItems');
-            const totalCostElem = document.getElementById('totalCost');
-            
-            
-            basketItems.innerHTML = '';
-            
-            
-            basket.items.forEach(item => {
-              const li = document.createElement('li');
-              li.textContent = ${item.qty} x ${item.product};
-              basketItems.appendChild(li);
-            });
-            
-            
-            totalCostElem.textContent = basket.getCost(prices).toFixed(2);
-          }
-      
-         
-          document.getElementById('addItemButton').addEventListener('click', function() {
-            const product = prompt("Enter product (apple, banana, or orange):");
-            const qty = parseInt(prompt("Enter quantity:"), 10);
-            
-            if (product && prices[product] && !isNaN(qty) && qty > 0) {
-              basket.addItem(product, qty);
-              updateDisplay();
-            } else {
-              alert("Invalid input! Try again.");
+    <button onclick="addItemToBasket('apple', 2)">Add 2 Apples</button>
+    <button onclick="addItemToBasket('banana', 3)">Add 3 Bananas</button>
+    <button onclick="showTotalCost()">Show Total Cost</button>
+
+    <div class="output">
+        <h3>Basket Contents:</h3>
+        <p id="basketContents"></p>
+        <h3>Total Cost:</h3>
+        <p id="totalCost"></p>
+    </div>
+
+    <script>
+        // Basket class definition
+        class Basket {
+            constructor() {
+                this.items = [];
             }
-          });
-      
-          updateDisplay();
-        </script>
+
+            addItem(product, qty) {
+                this.items.push({ product, qty });
+            }
+
+            getCost(prices) {
+                let totalCost = 0;
+                this.items.forEach(item => {
+                    if (prices[item.product]) {
+                        totalCost += prices[item.product] * item.qty;
+                    }
+                });
+                return totalCost;
+            }
+        }
+
+        // Sample product prices
+        const prices = {
+            apple: 1.5,
+            banana: 0.75 
+        };
+
+        // Initialize basket object
+        const basket = new Basket();
+
+        // Function to add an item to the basket
+        function addItemToBasket(product, qty) {
+            basket.addItem(product, qty);
+            updateBasketContents();
+        }
+
+        // Function to show total cost
+        function showTotalCost() {
+            const total = basket.getCost(prices);
+            document.getElementById("totalCost").innerText = "$" + total.toFixed(2);
+        }
+
+        // Update the displayed basket contents
+        function updateBasketContents() {
+            const contents = basket.items.map(item => ${item.qty} x ${item.product}).join(", ");
+            document.getElementById("basketContents").innerText = contents || "Basket is empty.";
+        }
+    </script>
+</body>
+</html>
+   
+   
+
+
+
